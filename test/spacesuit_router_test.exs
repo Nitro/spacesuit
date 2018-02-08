@@ -101,7 +101,7 @@ defmodule SpacesuitRouterTest do
     assert [_one, _two] = Map.get(handler_opts, :OPTIONS)
   end
 
-  test "transforming one route with :constraint" do
+  test "transforming one route with :constraints" do
     route =
       {'/users/:user_id',
         %{

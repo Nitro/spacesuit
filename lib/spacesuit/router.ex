@@ -40,7 +40,7 @@ defmodule Spacesuit.Router do
       |> process_headers
       |> add_all_actions
 
-    constraints = Map.get(compiled_opts, :constraints) || []
+    constraints = Map.get(compiled_opts, :constraints, [])
     compiled_opts = Map.delete(compiled_opts, :constraints)
 
     {route, constraints, Spacesuit.ProxyHandler, compiled_opts}
