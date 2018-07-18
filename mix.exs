@@ -24,16 +24,8 @@ defmodule Spacesuit.Mixfile do
   # Type "mix help compile.app" for more information
   def application do
     [
-      applications: [
-        :logger,
-        :cowboy,
-        :hackney,
-        :crypto,
-        :jose,
-        :exometer_newrelic_reporter,
-        :elixometer
-      ],
-      mod: {Spacesuit, []}
+      mod: {Spacesuit, []},
+      extra_applications: []
     ]
   end
 
@@ -62,6 +54,7 @@ defmodule Spacesuit.Mixfile do
       # Test only
       {:excoveralls, "~> 0.6", only: :test},
       {:mock, "~> 0.1.1", only: :test},
+      {:mox, "~> 0.3.2", only: :test},
       {:apex, "~>1.1.0"}
     ]
   end

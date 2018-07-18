@@ -1,36 +1,3 @@
-defmodule SessionService do
-  @moduledoc """
-    Describe a SessionService implementation. Use for handling auth derived
-    from bearer tokens.
-  """
-
-  @callback validate_api_token(String.t()) :: Tuple.t()
-  @callback handle_bearer_token(Map.t(), Map.t(), String.t(), String.t()) :: Tuple.t()
-end
-
-defmodule Spacesuit.MockSessionService do
-  @behaviour SessionService
-  @moduledoc """
-    Mock session service used in testing the AuthHandler
-  """
-
-  def validate_api_token(token) do
-    case token do
-      "ok" -> :ok
-      "error" -> :error
-      _ -> :error
-    end
-  end
-
-  def handle_bearer_token(req, env, token, _url) do
-    case token do
-      "ok" -> {:ok, req, env}
-      "error" -> {:stop, req}
-      _ -> {:ok, req, env}
-    end
-  end
-end
-
 defmodule Spacesuit.SessionService do
   @moduledoc """
     Implementation of a SessionService that calls out to an external service
@@ -40,7 +7,8 @@ defmodule Spacesuit.SessionService do
   require Logger
   use Elixometer
 
-  @behaviour SessionService
+  @callback validate_api_token(String.t()) :: Tuple.t()
+  @callback handle_bearer_token(Map.t(), Map.t(), String.t(), String.t()) :: Tuple.t()
 
   @http_server Application.get_env(:spacesuit, :http_server)
   # How many milliseconds before we timeout call to session-service
@@ -63,15 +31,13 @@ defmodule Spacesuit.SessionService do
       {:ok, _, _} ->
         result
 
-      {:error, type, code, error} ->
+      {:error, type, code, error} when is_binary(error) ->
         Logger.error("Session-service #{inspect(type)} error: #{inspect(error)}")
+        @http_server.reply(code, %{}, error, req)
+        {:stop, req}
 
-        if is_binary(error) do
-          @http_server.reply(code, %{}, error, req)
-        else
-          error_reply(req, 503, "Upstream error")
-        end
-
+      {:error, _type, _code, _error} ->
+        error_reply(req, 503, "Upstream error")
         {:stop, req}
 
       {:error, type, error} ->
@@ -139,7 +105,8 @@ defmodule Spacesuit.SessionService do
         {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
           {:ok, body}
 
-        {:ok, %HTTPoison.Response{status_code: code, body: body}} when code >= 400 and code <= 499 ->
+        {:ok, %HTTPoison.Response{status_code: code, body: body}}
+        when code >= 400 and code <= 499 ->
           {:error, :http, code, body}
 
         {:error, %HTTPoison.Error{reason: reason}} ->
