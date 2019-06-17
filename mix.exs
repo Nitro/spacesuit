@@ -1,6 +1,6 @@
 defmodule Spacesuit.Mixfile do
   use Mix.Project
-  use Mix.Config
+#  use Mix.Config
 
   def build_embedded? do
     Mix.env() == :prod || Mix.env() == :dev
@@ -69,7 +69,7 @@ defmodule Spacesuit.Mixfile do
     ]
   end
 
-  config :logger,
-    backends: [:console],
-    compile_time_purge_level: :info
+#  config :logger,
+#    backends: [:console],
+#    compile_time_purge_level: :info
 end
