@@ -11,19 +11,22 @@ defmodule Spacesuit.ProxyHandler do
   def init(req, state) do
     route_name = Map.get(state, :description, "un-named")
     Logger.debug("Processing '#{route_name}'")
+    NewRelic.start_transaction("Spacesuit.ProxyHandler", route_name)
+    try do
+      %{method: method, headers: headers, peer: peer} = req
 
-    %{method: method, headers: headers, peer: peer} = req
+      # Prepare some things we'll need
+      ups_url = build_upstream_url(req, state)
+      peer = format_peer(peer)
+      all_headers = add_headers_to(headers, state[:add_headers])
+      ups_headers = cowboy_to_hackney(all_headers, peer, @http_server.uri(req))
 
-    # Prepare some things we'll need
-    ups_url = build_upstream_url(req, state)
-    peer = format_peer(peer)
-    all_headers = add_headers_to(headers, state[:add_headers])
-    ups_headers = cowboy_to_hackney(all_headers, peer, @http_server.uri(req))
-
-    # Make the proxy request
-    req = handle_request(req, ups_url, ups_headers, method)
-
-    {:ok, req, state}
+      # Make the proxy request
+      req = handle_request(req, ups_url, ups_headers, method)
+      {:ok, req, state}
+    after
+      NewRelic.stop_transaction()
+    end
   end
 
   @timed key: "timed.proxyHandler-proxyRequest", units: :millisecond
