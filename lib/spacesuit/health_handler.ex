@@ -1,11 +1,9 @@
 defmodule Spacesuit.HealthHandler do
   require Logger
-  use Elixometer
 
   @http_server Application.get_env(:spacesuit, :http_server)
 
   # Callback from the Cowboy handler
-  @timed key: "timed.healthHandler-handle", units: :millisecond
   def init(req, state) do
     msg =
       Spacesuit.ApiMessage.encode(%Spacesuit.ApiMessage{

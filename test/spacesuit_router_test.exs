@@ -104,11 +104,11 @@ defmodule SpacesuitRouterTest do
   test "transforming one route with :constraints" do
     route =
       {'/users/:user_id',
-        %{
-          description: 'users to localhost',
-          GET: 'http://localhost:9090/:user_id',
-          constraints: [{:user_id, :int}]
-        }}
+       %{
+         description: 'users to localhost',
+         GET: 'http://localhost:9090/:user_id',
+         constraints: [{:user_id, :int}]
+       }}
 
     output = Spacesuit.Router.transform_one_route(route)
     {_route, constraint, _handler, handler_opts} = output

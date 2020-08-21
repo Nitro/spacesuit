@@ -38,7 +38,6 @@ defmodule Spacesuit.SessionService do
     blob containing an enriched/modified token.
   """
   require Logger
-  use Elixometer
 
   @behaviour SessionService
 
@@ -134,20 +133,19 @@ defmodule Spacesuit.SessionService do
       recv_timeout: @recv_timeout
     ]
 
-    timed "timed.sessionService-get", :millisecond do
-      case HTTPoison.get(url, headers, options) do
-        {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
-          {:ok, body}
+    case HTTPoison.get(url, headers, options) do
+      {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
+        {:ok, body}
 
-        {:ok, %HTTPoison.Response{status_code: code, body: body}} when code >= 400 and code <= 499 ->
-          {:error, :http, code, body}
+      {:ok, %HTTPoison.Response{status_code: code, body: body}}
+      when code >= 400 and code <= 499 ->
+        {:error, :http, code, body}
 
-        {:error, %HTTPoison.Error{reason: reason}} ->
-          {:error, :http, 500, reason}
+      {:error, %HTTPoison.Error{reason: reason}} ->
+        {:error, :http, 500, reason}
 
-        unexpected ->
-          {:error, :http, 500, "Unexpected response from #{url}: #{inspect(unexpected)}"}
-      end
+      unexpected ->
+        {:error, :http, 500, "Unexpected response from #{url}: #{inspect(unexpected)}"}
     end
   end
 

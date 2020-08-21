@@ -1,17 +1,16 @@
 defmodule Spacesuit.ProxyHandler do
   require Logger
-  use Elixometer
   require IEx
 
   @http_client Application.get_env(:spacesuit, :http_client)
   @http_server Application.get_env(:spacesuit, :http_server)
 
   # Callback from the Cowboy handler
-  @timed key: "timed.proxyHandler-handle", units: :millisecond
   def init(req, state) do
     route_name = Map.get(state, :description, "un-named")
     Logger.debug("Processing '#{route_name}'")
     NewRelic.start_transaction("Spacesuit.ProxyHandler", route_name)
+
     try do
       %{method: method, headers: headers, peer: peer} = req
 
@@ -29,7 +28,6 @@ defmodule Spacesuit.ProxyHandler do
     end
   end
 
-  @timed key: "timed.proxyHandler-proxyRequest", units: :millisecond
   def handle_request(req, ups_url, ups_headers, method) do
     case request_upstream(method, ups_url, ups_headers, req) do
       {:ok, status, headers, upstream} ->
