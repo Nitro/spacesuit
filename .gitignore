@@ -21,3 +21,9 @@ erl_crash.dump
 
 # Don't want the lager log/ directory
 /log
+
+# asdf files.
+/.tool-versions
+
+# Temporary files.
+/tmp
