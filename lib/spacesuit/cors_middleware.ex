@@ -9,12 +9,10 @@ defmodule Spacesuit.CorsMiddleware do
   """
 
   require Logger
-  use Elixometer
 
   @http_server Application.get_env(:spacesuit, :http_server)
   @supported_http_methods [:GET, :POST, :PUT, :PATCH, :DELETE, :HEAD, :OPTIONS]
 
-  @timed key: "timed.corsMiddleware-execute", units: :millisecond
   def execute(req, env) do
     result =
       with {true, :enabled?} <- enabled?(),

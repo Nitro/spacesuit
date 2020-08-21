@@ -30,8 +30,6 @@ defmodule Spacesuit.Mixfile do
         :hackney,
         :crypto,
         :jose,
-        :exometer_newrelic_reporter,
-        :elixometer,
         :new_relic_agent
       ],
       mod: {Spacesuit, []}
@@ -52,13 +50,10 @@ defmodule Spacesuit.Mixfile do
       # All envs
       {:hackney, "~> 1.7.1", override: true},
       {:cowboy, github: "extend/cowboy"},
-      {:poison, "~> 3.0", override: true},
+      {:poison, "~> 2.0"},
+      {:httpoison, "~> 0.9.0"},
       {:jsx, "~> 2.8.0"},
       {:joken, "~> 1.4.1"},
-      {:elixometer, github: "pinterest/elixometer"},
-      {:exometer_newrelic_reporter, github: "nitro/exometer_newrelic_reporter"},
-      {:lager, "3.2.4", override: true},
-      {:lager_logger, github: "PSPDFKit-labs/lager_logger"},
       {:new_relic_agent, "~> 1.0"},
 
       # Test only

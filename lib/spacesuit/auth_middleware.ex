@@ -1,10 +1,8 @@
 defmodule Spacesuit.AuthMiddleware do
   require Logger
-  use Elixometer
 
   @http_server Application.get_env(:spacesuit, :http_server)
 
-  @timed key: "timed.authMiddleware-handle", units: :millisecond
   def execute(req, env) do
     case req[:headers]["authorization"] do
       nil ->

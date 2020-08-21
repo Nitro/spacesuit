@@ -187,13 +187,13 @@ defmodule SpacesuitProxyHandlerTest do
 
   test "proxies requests with upstreams but without bodies without streaming" do
     headers = [
-      {"Date", "Sun, 18 Dec 2016 12:12:02 GMT"},
+      {"Date", "Sun, 18 Dec 2016 12:12:02 GMT"}
     ]
 
     req = %{
       bindings: [asdf: "foo"],
       method: "GET",
-      qs: "shakespeare=literature",
+      qs: "shakespeare=literature"
     }
 
     Spacesuit.ProxyHandler.handle_reply(200, req, headers, self())
@@ -237,13 +237,13 @@ defmodule SpacesuitProxyHandlerTest do
 
   test "proxies requests with a 204 status without streaming" do
     headers = [
-      {"Date", "Sun, 18 Dec 2016 12:12:02 GMT"},
+      {"Date", "Sun, 18 Dec 2016 12:12:02 GMT"}
     ]
 
     req = %{
       bindings: [asdf: "foo"],
       method: "GET",
-      qs: "shakespeare=literature",
+      qs: "shakespeare=literature"
     }
 
     Spacesuit.ProxyHandler.handle_reply(204, req, headers, self())
@@ -261,13 +261,13 @@ defmodule SpacesuitProxyHandlerTest do
 
   test "proxies requests with a nil upstream without streaming" do
     headers = [
-      {"Date", "Sun, 18 Dec 2016 12:12:02 GMT"},
+      {"Date", "Sun, 18 Dec 2016 12:12:02 GMT"}
     ]
 
     req = %{
       bindings: [asdf: "foo"],
       method: "GET",
-      qs: "shakespeare=literature",
+      qs: "shakespeare=literature"
     }
 
     Spacesuit.ProxyHandler.handle_reply(200, req, headers, nil)
@@ -292,7 +292,7 @@ defmodule SpacesuitProxyHandlerTest do
     req = %{
       bindings: [asdf: "foo"],
       method: "GET",
-      qs: "shakespeare=literature",
+      qs: "shakespeare=literature"
     }
 
     Spacesuit.ProxyHandler.handle_reply(200, req, headers, self())
