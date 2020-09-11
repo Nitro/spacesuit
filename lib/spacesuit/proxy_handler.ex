@@ -128,7 +128,7 @@ defmodule Spacesuit.ProxyHandler do
 
         {:more, _body, _downstream} ->
           # TODO this doesn't handle large bodies
-          Logger.error("Request body too large! Size was #{:cowboy_req.body_length(downstream)}")
+          Logger.info("Request body too large! Size was #{:cowboy_req.body_length(downstream)}")
       end
     else
       @http_client.request(method, url, ups_headers, [], [])

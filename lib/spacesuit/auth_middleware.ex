@@ -30,7 +30,7 @@ defmodule Spacesuit.AuthMiddleware do
 
         # Otherwise we blow up the request
         unexpected ->
-          Logger.error("auth_middleware error: unexpected response - #{inspect(unexpected)}")
+          Logger.info("auth_middleware error: unexpected response - #{inspect(unexpected)}")
           error_reply(req, 401, "Bad Authentication Token")
           {:stop, req}
       end
